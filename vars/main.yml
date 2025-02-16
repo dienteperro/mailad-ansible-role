@@ -14,6 +14,14 @@ mynetworks: 10.42.1.0/24
 smarthost:
 everyone:
 national: ".cu" # end domain name, with the start dot, like ".edu.cu"
+# The following var is optional, define it if you have upstream relays
+# Several upstream relays can only be defined in Postfix >= 3.5
+#relayhost:
+#  - [ip] or fqdn
+# The following var is optional, define it if you have upstream relay(s)
+# to use ONLY in case of failure of the relayhost(s) defined.
+#smtp_fallback_relay:
+#  - [ip] or fqdn
 
 # mailbox settings
 mailbox_username: vmail
