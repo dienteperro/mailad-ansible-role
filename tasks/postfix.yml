@@ -46,6 +46,10 @@
     mode: '0644'
   notify: postmap lista_negra
 
+- name: Gather package facts for postfix version check
+  ansible.builtin.package_facts:
+    manager: auto
+
 - name: "Apply templates to /etc/postfix folder items"
   template:
     src: "../templates/etc/postfix/{{ item }}.j2"
