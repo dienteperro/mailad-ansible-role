@@ -22,7 +22,24 @@ mydestination = $myhostname, localhost.$mydomain, localhost
 myorigin = $myhostname
 
 # relay host, blank for direct or IP/fqdn for hostname
+# use [square brackets] to avoid dns check of the ip
+# In Postfix >= 3.5 you can use several relays separated by comma or space
+# Check http://www.postfix.org/postconf.5.html#relayhost for further info
+{% if relayhost is defined %}
+{% if ansible_facts.packages['postfix'][0].version is version('3.5.0', '>=') %}
+relayhost = {% for item in relayhost %}{{ item }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% else %}
+relayhost = {{ relayhost[0] }}
+{% endif %}
+{% else %}
 relayhost = {{ smarthost | default("") }}
+{% endif %}
+
+{% if smtp_fallback_relay is defined %}
+# host to use if relayhost fails
+# Check http://www.postfix.org/postconf.5.html#smtp_fallback_relay for further info
+smtp_fallback_relay = {% for item in smtp_fallback_relay %}{{ item }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endif %}
 
 # Only trusted servers/host's  networks here
 mynetworks = 127.0.0.0/8 {{ mynetworks }}
